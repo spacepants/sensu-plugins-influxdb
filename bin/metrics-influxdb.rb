@@ -56,11 +56,11 @@ class SensuToInfluxDB < Sensu::Handler
     metric_raw.split("\n").each do |metric|
       m = metric.split
       next unless m.count == 3
-      key = m[0].split('.', 2)[1]
-      key.tr!('.', '_')
+      key = m[0].split('.', 4)
+      series = "#{key[0]}_#{key[1]}_#{key[2]}.#{key[3]}"
       value = m[1].to_f
       time = m[2]
-      point = create_point(key, value, time)
+      point = create_point(series, value, time)
       data.push(point)
     end
     data
